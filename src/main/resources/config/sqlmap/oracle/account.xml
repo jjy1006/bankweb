@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.AccountDAO">
+	<!-- account --> 
+
+	<!-- 계좌 개설 -->
+	<insert id="insertAcc" parameterType="accountVO">
+		insert into ACCOUNT(ACCOUNT_NUMBER, OWNER_ID, TRANSFER_PASSWORD, ANALIAS, PRODUCT_NO)
+			VALUES(#{accountNumber}, #{onwerId},   	#{transferPassword}, #{name}, #{productNo})
+	</insert>
+	
+	<select id="ckAccnum" parameterType="Long" resultType="int">
+		select count(*)
+		from account
+		where ACCOUNT_NUMBER = #{accNum}
+	</select>
+	
+	<select id="selectAll" resultType="accountVO">
+		select account_number accountNumber, ANALIAS name, BALANCE, 
+		PRODUCT_NO productNo,ACCOUNT_OPENING_DATE accountOpeningDate
+		from account
+		where owner_id = #{id}
+	</select>
+	
+	<select id="selectOneAcc" parameterType="Long" resultType="accountVO">
+		select ACCOUNT_NUMBER accountNumber, OWNER_ID onwerId
+			, TRANSFER_PASSWORD transferPassword, ANALIAS name
+			, BALANCE, ACCOUNT_OPENING_DATE accountOpeningDate, PRODUCT_NO productNo 
+		from account
+		where account_number = #{accNum}
+	</select>
+	
+	<select id="selectAccNums" parameterType="String" resultType="int">
+		select account_number 
+		from account
+		where owner_id = #{id}
+	</select>
+	
+	<select id="ckPW" parameterType="accountVO" resultType="int">
+		select count(*)
+		from account
+		where account_Number = #{accountNumber} and owner_id = #{onwerId}
+		 and transfer_Password = #{transferPassword}
+	</select>
+	
+	<!-- 잔액 확인 쿼리 -->
+    <select id="getBalance" parameterType="long" resultType="Long">
+        SELECT balance FROM account WHERE account_number = #{accountNumber}
+    </select>
+	<select id="getBalance2" parameterType="long" resultType="double">
+        SELECT balance FROM account WHERE account_number = #{accountNumber}
+    </select>
+    <!-- 잔액 업데이트 쿼리 -->
+    <update id="updateBalance" parameterType="accountVO">
+        UPDATE account SET balance = #{balance} WHERE account_number = #{accountNumber}
+    </update>
+    <delete id="deleteAcccountByOnwerId" parameterType="String">
+    	DELETE FROM ACCOUNT
+		WHERE owner_id = #{id}
+    </delete>
+</mapper>
+
+
+
+

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.AccountDAO">
+	<!-- transaction --> 
+
+	<insert id="insertHistory" parameterType="transactionVO">
+		INSERT INTO TRANSACTION(NO, TRADE_TYPE 
+			<if test="senderAccountnumber!=null">, SENDER_ACCOUNT_NUMBER</if>
+			<if test="receiverAccountnumber != null">, RECEIVER_ACCOUNT_NUMBER</if>
+			, TRANSFER_AMOUNT, AFTER_BALANCE)
+			VALUES(SEQ_TRANSACTION.NEXTVAL, #{transactionType}
+				<if test="senderAccountnumber!=null">, #{senderAccountnumber}</if>
+				<if test="receiverAccountnumber!=null">, #{receiverAccountnumber}</if>
+				, #{transferAmount}, #{afterBalance})
+	</insert>
+	
+	<select id="selectTransactions" parameterType="Long" resultType="transactionVO">
+		select no, TRADE_TYPE transactionType, SENDER_ACCOUNT_NUMBER senderAccountnumber, RECEIVER_ACCOUNT_NUMBER receiverAccountnumber, TRANSFER_AMOUNT transferAmount, AFTER_BALANCE afterBalance, TRANSACTION_DATETIME transactionDatetime
+		from TRANSACTION
+		where SENDER_ACCOUNT_NUMBER = #{accNum}
+		 OR RECEIVER_ACCOUNT_NUMBER = #{accNum}
+		 order by transactionDatetime desc
+	</select>
+</mapper>
+
+
+
+

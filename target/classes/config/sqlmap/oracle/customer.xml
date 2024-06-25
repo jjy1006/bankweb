@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.MemberDAO">
+	<!-- 로그인  -->
+	<select id="login2" parameterType="memberVO" resultType="memberVO">
+		 select id, password, name, TO_CHAR(birthDay, 'YYYY-MM-DD') as birthDay, TO_CHAR(regDate, 'YYYY-MM-DD') as regDate, tel, rrn
+        from CUSTOMER
+        where id=#{id} and password=#{password}
+        union all
+        select id, password, name, null as birthDay, TO_CHAR(createDate, 'YYYY-MM-DD') as regDate, null as tel, null as rrn
+        from ADMIN
+        where id=#{id} and password=#{password}
+	</select>
+	<select id="login" parameterType="memberVO" resultType="memberVO">
+		 select id, password, name, TO_CHAR(birthDay, 'YYYY-MM-DD') as birthDay, TO_CHAR(regDate, 'YYYY-MM-DD') as regDate, tel, rrn
+        from CUSTOMER
+        where id=#{id} and password=#{password}
+	</select>
+	<select id="adminLogin" parameterType="memberVO" resultType="memberVO">
+		 select id, password, name
+        from ADMIN
+        where id=#{id} and password=#{password}
+	</select>
+	
+	<select id="checkById" parameterType="String" resultType="memberVO">
+		select *
+		  from CUSTOMER
+		 where id=#{id}
+	</select>
+	
+	<select id="checkByAdminId" parameterType="String" resultType="memberVO">
+		select *
+		  from ADMIN
+		 where id=#{id}
+	</select>
+	
+	<insert id="signup" parameterType="memberVO"> 
+	INSERT INTO CUSTOMER(ID ,  Password ,  Name ,          BirthDay ,                Tel ,   RRN)
+				VALUES(#{id},#{password},#{name},to_date(#{BirthDay},'YYYY-MM-DD'),#{Tel} ,#{RRN})
+	</insert>
+	
+	<delete id="deleteCustomer" parameterType="String">
+		delete from CUSTOMER
+		 where id=#{id}
+	</delete>
+	
+	<update id="updateCustomer" parameterType="memberVO">
+		UPDATE CUSTOMER
+		SET 
+  		  <if test="passowd != null">
+			PASSWORD=#{password}
+  		  </if>
+  		  <if test="name != null">
+  		   AND NAME=#{name}
+  		  </if>
+  		  <if test="BirthDay != null">
+  		   AND BIRTHDAY=#{BirthDay}
+  		  </if>
+  		  <if test="Tel != null">
+  		    AND TEL=#{Tel}
+  		  </if> 
+			WHERE ID=#{id};
+	</update>
+	<!-- 
+	 -->
+	
+</mapper>
+
+
+
+

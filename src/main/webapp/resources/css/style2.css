@@ -1,0 +1,19 @@
+.footer {
+    background-color: #004080;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    margin-left: 0; /* 왼쪽 여백 제거 */
+}
+
+.footer-content {
+    font-size: 14px;
+}
+
+.advertisement {
+    font-weight: bold;
+    color: #ff9900;
+}
